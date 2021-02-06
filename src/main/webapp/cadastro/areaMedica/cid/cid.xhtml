@@ -1,0 +1,91 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmCid">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+
+			<h2>Pesquisa de CID's</h2>
+					
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" title="Pesquisar" icon="pesquisar-icone"
+						actionListener="#{cidBean.pesquisaCids}" update=":frmCid:cidTable"> 
+		   			</p:commandButton>	 
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+                    <p:commandButton value="Exportar para XLS" ajax="false" icon="excel-icone"
+                        disabled="#{empty cidBean.cids}">
+                        <p:dataExporter type="xls" target="cidTable"
+                        fileName="Cid" postProcessor="#{formatarExportacaoExcel.posProcessarXls}" />
+                    </p:commandButton>
+                    <p:commandButton value="Exportar para PDF" ajax="false" icon="pdf-icone"
+                        disabled="#{empty cidBean.cids}">
+                        <p:dataExporter type="pdf" target="cidTable" fileName="Cid"/>
+                    </p:commandButton>
+			        <p:commandButton 
+			           value="Sair" ajax="false" title = "Retorna ao menu"
+			           action="/inicio.xhtml" icon="sair-icone"  
+			           onclick="this.form.target='_self'">
+			        </p:commandButton> 		   				 
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+			    	<p:panelGrid columns="2" id="painelPesquisa" style="width: 100%; margin-top: 20px; text-align: left;"
+			    			columnClasses="rotulo, campo">
+			    		<p:outputLabel value="CID" for="codigo"/>
+			    		<p:inputText id="codigo" size="10" value="#{cidBean.cidFiltro.cdCid}"/>
+			    		<p:outputLabel value="Nome do CID" for="descricao"/>
+			    		<p:inputText id="descricao" size="60" value="#{cidBean.cidFiltro.dsCid}"/>
+			    	</p:panelGrid>
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+			
+			<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+		    	<p:dataTable id="cidTable" value="#{cidBean.cids}" var="cid"
+		    		style="margin-top: 20px" emptyMessage="Nenhum cid encontrado." 
+		    		paginator="true" rows="7" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		            rowsPerPageTemplate="5,7,10,15,20"
+		            currentPageReportTemplate="[ Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros  
+                    - Página: {currentPage}/{totalPages} ]">
+
+		    		<p:column headerText="Categoria" style="text-align: left" sortBy="#{cid.categoriaCid.dsCategoriaCid}">
+		    			<h:outputText value="#{cid.categoriaCid.dsCategoriaCid}" />
+		    		</p:column>
+
+		    		<p:column headerText="Código do CID" style="text-align: left" sortBy="#{cid.cdCid}">
+		    			<h:outputText value="#{cid.cdCid}" />
+		    		</p:column>
+
+		    		<p:column headerText="Nome do CID" style="text-align: left" sortBy="#{cid.dsCid}">
+		    			<h:outputText value="#{cid.dsCid}" />
+		    		</p:column>
+
+		    		<p:column headerText="Nome abreviado do CID" style="text-align: left" sortBy="#{cid.dsCidAbrev}">
+		    			<h:outputText value="#{cid.dsCidAbrev}" />
+		    		</p:column>
+
+		    		<p:column headerText="Classificação" style="text-align: left" sortBy="#{cid.tpClassificacao}">
+		    			<h:outputText value="#{cid.tpClassificacao}" />
+		    		</p:column>
+
+		    		<p:column headerText="Sexo" style="text-align: left" sortBy="#{cid.tpSexo.descricao}">
+		    			<h:outputText value="#{cid.tpSexo.descricao}" />
+		    		</p:column>
+
+	                <p:column headerText="Ativo" style="width: 55px; text-align: left" sortBy="#{cid.snAtivo.descricao}">
+	                    <h:outputText value="#{cid.snAtivo.descricao}" />
+	                </p:column>
+
+		    	</p:dataTable>
+	    	</p:panelGrid>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

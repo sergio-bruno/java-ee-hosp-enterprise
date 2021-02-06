@@ -1,0 +1,128 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmSubGrupoProduto">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+
+			<h2>Cadastro de subgrupos de Produto</h2>
+					
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" title="Pesquisar" icon="pesquisar-icone"
+						actionListener="#{subGrupoProdutoBean.pesquisaSubGrupoProdutos}" update=":frmSubGrupoProduto:subGrupoProdutoTable"> 
+		   			</p:commandButton>	 
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+					<p:commandButton value="Incluir" title="Novo" icon="novo-icone"
+						oncomplete="PF('edicaoSubGrupoProdutoDialog').show(); return false;"
+		  				process="@this" update=":frmSubGrupoProduto:inclusaoPanel">
+		  				<f:setPropertyActionListener target="#{subGrupoProdutoBean.subGrupoProduto}" value="#{subGrupoProduto}" />
+		   			</p:commandButton>	 
+                    <p:commandButton value="Exportar para XLS" ajax="false" icon="excel-icone"
+                        disabled="#{empty subGrupoProdutoBean.subGrupoProdutos}">
+                        <p:dataExporter type="xls" target="subGrupoProdutoTable"
+                        fileName="SubGrupoProduto" postProcessor="#{formatarExportacaoExcel.posProcessarXls}" />
+                    </p:commandButton>
+                    <p:commandButton value="Exportar para PDF" ajax="false" icon="pdf-icone"
+                        disabled="#{empty subGrupoProdutoBean.subGrupoProdutos}">
+                        <p:dataExporter type="pdf" target="subGrupoProdutoTable" fileName="SubGrupoProduto"/>
+                    </p:commandButton>
+			        <p:commandButton 
+			           value="Sair" ajax="false" title = "Retorna ao menu"
+			           action="/inicio.xhtml" icon="sair-icone"  
+			           onclick="this.form.target='_self'">
+			        </p:commandButton> 		   				 
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+			    	<p:panelGrid columns="2" id="painelPesquisa" style="width: 100%; margin-top: 20px"
+			    			columnClasses="rotulo, campo">
+			    		<p:outputLabel value="Nome do subgrupo do produto" for="descricao"/>
+			    		<p:inputText id="descricao" size="60" value="#{subGrupoProdutoBean.subGrupoProdutoFiltro.dsSubGrupoProduto}"/>
+			    	</p:panelGrid>
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+			
+			<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+		    	<p:dataTable id="subGrupoProdutoTable" value="#{subGrupoProdutoBean.subGrupoProdutos}" var="subGrupoProduto"
+		    		style="margin-top: 20px" emptyMessage="Nenhum grupo de produto encontrado." 
+		    		paginator="true" rows="7" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		            rowsPerPageTemplate="5,7,10,15,20"
+		            currentPageReportTemplate="[ Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros  
+                    - Página: {currentPage}/{totalPages} ]">
+		    		
+		    		<p:column headerText="Nome do subgrupo do produto" style="text-align: left" sortBy="#{subGrupoProduto.dsSubGrupoProduto}">
+		    			<h:outputText value="#{subGrupoProduto.dsSubGrupoProduto}" />
+		    		</p:column>
+		    		<p:column headerText="Nome do grupo do produto" style="text-align: left" sortBy="#{subGrupoProduto.grupoProduto.dsGrupoProduto}">
+		    			<h:outputText value="#{subGrupoProduto.grupoProduto.dsGrupoProduto}" />
+		    		</p:column>
+	                <p:column headerText="Ativo" style="width: 55px; text-align: left" sortBy="#{subGrupoProduto.snAtivo.descricao}">
+	                    <h:outputText value="#{subGrupoProduto.snAtivo.descricao}" />
+	                </p:column>
+		    		<p:column style="width: 100px; text-align: center" exportable="false">
+						<f:facet name="header">Ações</f:facet>
+						<p:commandButton icon="editar-icone" title="Editar"
+							action="#{subGrupoProdutoBean.alterar(subGrupoProduto)}" 
+							oncomplete="PF('edicaoSubGrupoProdutoDialog').show(); return false;"
+	    					process="subGrupoProdutoTable" 
+	    					update=":frmSubGrupoProduto:inclusaoPanel">
+	    				    <f:setPropertyActionListener target="#{subGrupoProdutoBean.subGrupoProduto}" value="#{subGrupoProduto}" />
+		    			</p:commandButton>	
+	                    <p:commandButton icon="remover-icone" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmSubGrupoProduto:confirmacaoExclusaoDialog">
+	    				    <f:setPropertyActionListener target="#{subGrupoProdutoBean.subGrupoProduto}" 
+	    					value="#{subGrupoProduto}" />
+		    			</p:commandButton>	    				
+		    		</p:column>
+		    	</p:dataTable>
+	    	</p:panelGrid>
+
+	    	<p:confirmDialog header="Exclusão de subgrupo de produto" 
+	    		message="Tem certeza que deseja excluir o subgrupo do produto #{subGrupoProdutoBean.subGrupoProduto.dsSubGrupoProduto}?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" icon="ui-icon-close"/>
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+	    			actionListener="#{subGrupoProdutoBean.remover(subGrupoProdutoBean.subGrupoProduto)}" process="@this"
+	    			update=":frmSubGrupoProduto:subGrupoProdutoTable, :frmSubGrupoProduto:growl" icon="ui-icon-check"/>
+	    	</p:confirmDialog>    	
+
+			<p:dialog header="Edição de subgrupo do produto" 
+			widgetVar="edicaoSubGrupoProdutoDialog" modal="true" resizable="false">
+				<h:panelGroup id="inclusaoPanel">
+					<br/>
+					<h:inputHidden value="#{subGrupoProdutoBean.subGrupoProduto.cdSubGrupoProduto}" />
+					<h:panelGrid columns="2" style="text-align: left">
+						<p:outputLabel value="Nome do subgrupo do produto:" for="dsSubGrupoProduto" />
+						<p:inputText id="dsSubGrupoProduto" size="45" maxlength="150" value="#{subGrupoProdutoBean.subGrupoProduto.dsSubGrupoProduto}"/>
+
+						<p:outputLabel value="Grupo:" for="grupoProduto" />
+						<p:selectOneMenu id="grupoProduto" value="#{subGrupoProdutoBean.cdGrupoProduto}" style="width: 420px;">
+							<f:selectItem itemLabel="Selecione um item" itemValue="" />
+							<f:selectItems value="#{grupoProdutoBean.grupoProdutos}" var="grupoProduto" itemValue="#{grupoProduto.cdGrupoProduto}" itemLabel="#{grupoProduto.dsGrupoProduto}" />
+						</p:selectOneMenu>
+
+		                <p:outputLabel value="Ativo" for="snAtivo"/>
+				        <p:selectOneMenu id="snAtivo" value="#{subGrupoProdutoBean.subGrupoProduto.snAtivo}" style="width:125px">
+				            <f:selectItem itemLabel="Sim" itemValue="S" />
+				            <f:selectItem itemLabel="Não" itemValue="N" />
+				        </p:selectOneMenu>                 
+					</h:panelGrid>
+					<br/>
+					<p:commandButton icon="ui-icon-disk" value="Salvar" 
+						update=":frmSubGrupoProduto:subGrupoProdutoTable, :frmSubGrupoProduto:inclusaoPanel" 
+						actionListener="#{subGrupoProdutoBean.salvar}" onclick="dialog.reset();"/>
+				   	<p:commandButton value="Sair" title = "Sair sem gravar" 
+				   		onclick="dialog.reset();" icon="ui-icon-power"/>
+				</h:panelGroup>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

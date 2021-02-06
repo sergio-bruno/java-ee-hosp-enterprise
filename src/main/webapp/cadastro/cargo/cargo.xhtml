@@ -1,0 +1,120 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmCargo">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+
+			<h2>Cadastro de cargos</h2>
+					
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" title="Pesquisar" icon="pesquisar-icone"
+						actionListener="#{cargoBean.pesquisaCargos}" update=":frmCargo:cargoTable"> 
+		   			</p:commandButton>	 
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+					<p:commandButton value="Incluir" title="Novo" icon="novo-icone"
+						oncomplete="configurarMoeda(); PF('edicaoCargoDialog').show(); return false;"
+		  				process="@this" update=":frmCargo:inclusaoPanel">
+		  				<f:setPropertyActionListener target="#{cargoBean.cargo}" value="#{cargo}" />
+		   			</p:commandButton>	 
+                    <p:commandButton value="Exportar para XLS" ajax="false" icon="excel-icone"
+                        disabled="#{empty cargoBean.cargos}">
+                        <p:dataExporter type="xls" target="cargoTable"
+                        fileName="Cargo" postProcessor="#{formatarExportacaoExcel.posProcessarXls}" />
+                    </p:commandButton>
+                    <p:commandButton value="Exportar para PDF" ajax="false" icon="pdf-icone"
+                        disabled="#{empty cargoBean.cargos}">
+                        <p:dataExporter type="pdf" target="cargoTable" fileName="Cargo"/>
+                    </p:commandButton>
+			        <p:commandButton 
+			           value="Sair" ajax="false" title = "Retorna ao menu"
+			           action="/inicio.xhtml" icon="sair-icone"  
+			           onclick="this.form.target='_self'">
+			        </p:commandButton> 		   				 
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+			    	<p:panelGrid columns="2" id="painelPesquisa" style="width: 100%; margin-top: 20px"
+			    			columnClasses="rotulo, campo">
+			    		<p:outputLabel value="Nome do cargo" for="descricao"/>
+			    		<p:inputText id="descricao" size="60" value="#{cargoBean.cargoFiltro.dsCargo}"/>
+			    	</p:panelGrid>
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+			
+			<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+		    	<p:dataTable id="cargoTable" value="#{cargoBean.cargos}" var="cargo"
+		    		style="margin-top: 20px" emptyMessage="Nenhum cargo encontrado." 
+		    		paginator="true" rows="7" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		            rowsPerPageTemplate="5,7,10,15,20"
+		            currentPageReportTemplate="[ Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros  
+                    - Página: {currentPage}/{totalPages} ]">
+		    		
+		    		<p:column headerText="Nome do cargo" style="text-align: left" sortBy="#{cargo.dsCargo}">
+		    			<h:outputText value="#{cargo.dsCargo}" />
+		    		</p:column>
+		    		<p:column style="width: 100px; text-align: center" exportable="false">
+						<f:facet name="header">Ações</f:facet>
+						<p:commandButton icon="editar-icone" title="Editar" oncomplete="configurarMoeda(); PF('edicaoCargoDialog').show(); return false;"
+	    					process="cargoTable" update=":frmCargo:inclusaoPanel">
+	    				    <f:setPropertyActionListener target="#{cargoBean.cargo}" value="#{cargo}" />
+		    			</p:commandButton>	 
+	                    <p:commandButton icon="remover-icone" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmCargo:confirmacaoExclusaoDialog">
+	    				    <f:setPropertyActionListener target="#{cargoBean.cargo}" 
+	    					value="#{cargo}" />
+		    			</p:commandButton>	    				
+		    		</p:column>
+		    	</p:dataTable>
+	    	</p:panelGrid>
+
+	    	<p:confirmDialog header="Exclusão de cargo" 
+	    		message="Tem certeza que deseja excluir o cargo #{cargoBean.cargo.dsCargo}?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" icon="ui-icon-close"/>
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+	    			actionListener="#{cargoBean.remover(cargoBean.cargo)}" process="@this"
+	    			update=":frmCargo:cargoTable, :frmCargo:growl" icon="ui-icon-check"/>
+	    	</p:confirmDialog>    	
+
+			<p:dialog header="Edição de cargo" 
+			widgetVar="edicaoCargoDialog" modal="true" resizable="false">
+				<h:panelGroup id="inclusaoPanel">
+					<br/>
+					<h:inputHidden value="#{cargoBean.cargo.cdCargo}" />
+					<h:panelGrid columns="2" style="text-align: left">
+						<p:outputLabel value="Nome do cargo:" for="dsCargo" />
+						<p:inputText id="dsCargo" size="45" maxlength="150" value="#{cargoBean.cargo.dsCargo}"/>
+						
+	    		<p:outputLabel value="Valor unitário" for="valorUnitario"/>
+	    		<p:inputText id="valorUnitario" size="10" maxlength="10" styleClass="moeda">
+	    			<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+	    		</p:inputText>
+	    		
+					</h:panelGrid>
+					<br/>
+					<p:commandButton icon="ui-icon-disk" value="Salvar" 
+						update=":frmCargo:cargoTable, :frmCargo:inclusaoPanel" 
+						actionListener="#{cargoBean.salvar}" onclick="dialog.reset();"/>
+				   	<p:commandButton value="Sair" title = "Sair sem gravar" 
+				   		onclick="dialog.reset();" icon="ui-icon-power"/>
+				</h:panelGroup>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+
+
+
+
+
+

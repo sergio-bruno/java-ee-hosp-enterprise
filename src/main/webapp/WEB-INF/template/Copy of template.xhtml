@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<title>eHospEnterprise - Sistema para Gerenciamento Hospitalar</title>
+		<h:outputStylesheet library="css" name="style.css"/>
+		<h:outputScript library="js" name="jquery.maskMoney.js"/>
+	</h:head>
+	
+	<h:body>
+		<!-- Para quando clicar no botão salvar das telas de cadastrados a tela será recarregada e a configuração de máscara de moeda
+		     seria perdida por isso usa-se onsuccess="configurarMoeda()" -->
+		<p:ajaxStatus styleClass="ajax-status" onsuccess="configurarMoeda()">
+			<f:facet name="start">
+				<h:graphicImage library="imagens" name="loading.gif"/>
+			</f:facet>
+			<f:facet name="complete">
+				<h:outputText value=""/>
+			</f:facet>
+		</p:ajaxStatus>
+		<div id="cabecalho">
+			<h:graphicImage library="imagens" name="logo-sismepe.png" id="logoCompany"/>
+		</div>
+		
+		<div id="menuSistema">
+			<h:form style="display: inline-block">
+				<p:menubar styleClass="menu-sistema">
+					<p:submenu label="Cadastros" icon="gerenciar-icone">
+						<p:menuitem value="Cargo" outcome="/cadastro/cargo/cargo?faces-redirect=true"/>
+						<p:menuitem value="OME" outcome="/cadastro/ome/ome?faces-redirect=true"/>
+						<p:menuitem value="Grupo do setor" />
+						<p:menuitem value="Setor" />
+						<p:menuitem value="Funcionário" />
+						<p:menuitem value="Empresa" outcome="/cadastro/empresa/empresa?faces-redirect=true"/>
+						<p:submenu label="Material">
+							<p:menuitem value="Fornecedor" />
+							<p:menuitem value="Fabricante" />
+							<p:menuitem value="Grupo" outcome="/cadastro/material/grupoProduto/grupoProduto?faces-redirect=true"/>
+							<p:menuitem value="Subgrupo" outcome="/cadastro/material/subGrupoProduto/subGrupoProduto?faces-redirect=true"/>
+							<p:menuitem value="Substância" outcome="/cadastro/material/substancia/substancia?faces-redirect=true"/>
+							<p:menuitem value="Classe de medicamento" outcome="/cadastro/material/classeMedicamento/classeMedicamento?faces-redirect=true"/>
+							<p:menuitem value="Subclasse de medicamento" />
+							<p:menuitem value="Unidade de medida" outcome="/cadastro/material/unidadeMedida/unidadeMedida?faces-redirect=true"/>
+							<p:menuitem value="Material" />
+						</p:submenu>	
+						<p:submenu label="Área médica">
+							<p:menuitem value="CID" outcome="/cadastro/areaMedica/cid/cid?faces-redirect=true"/>
+							<p:menuitem value="Tipo de conselho" outcome="/cadastro/areaMedica/tipoConselho/tipoConselho?faces-redirect=true"/>
+							<p:menuitem value="Conselho" outcome="/cadastro/areaMedica/conselho/conselho?faces-redirect=true"/>
+							<p:menuitem value="Unidade de atendimento" outcome="/cadastro/areaMedica/unidadeAtendimento/unidadeAtendimento?faces-redirect=true"/>
+						</p:submenu>	
+					</p:submenu>
+					<p:submenu label="Gerenciamento" icon="pasta-icone">
+						<p:submenu label="Entrada de material">
+							<p:menuitem value="Entrada por NF" icon="ui-icon-document"/>
+							<p:menuitem value="Entrada por transferência"/>
+							<p:menuitem value="Entrada por farmácia conveniada"/>
+							<p:menuitem value="Entrada para ajuste de estoque"/>
+						</p:submenu>	
+						<p:submenu label="Saída de material">
+							<p:menuitem value="Saída por solicitante" icon="ui-icon-document"/>
+							<p:menuitem value="Saída por transferência"/>
+							<p:menuitem value="Saída para ajuste de estoque"/>
+						</p:submenu>	
+					</p:submenu>
+					<p:submenu label="Relatórios" icon="impressora-icone">
+						<p:menuitem value="Entrada de material" />
+						<p:menuitem value="Saída de material" />
+						<p:separator/>
+						<p:menuitem value="Inventário mensal" />
+						<p:menuitem value="Inventário anual" />
+					</p:submenu>	
+		            <p:submenu  label="Temas" icon="tema-icone">  
+		                <p:menuitem value="Afterdark" ajax="false">  
+		                    <f:setPropertyActionListener value="afterdark" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Afternoon" ajax="false">  
+		                    <f:setPropertyActionListener value="afternoon" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Afterwork" ajax="false">  
+		                    <f:setPropertyActionListener value="afterwork" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Aristo" ajax="false">  
+		                    <f:setPropertyActionListener value="aristo" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Black-Tie" ajax="false">  
+		                    <f:setPropertyActionListener value="black-tie" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Blitzer" ajax="false">  
+		                    <f:setPropertyActionListener value="blitzer" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Bluesky" ajax="false">  
+		                    <f:setPropertyActionListener value="bluesky" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Bootstarp" ajax="false">  
+		                    <f:setPropertyActionListener value="bootstrap" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Casablanca" ajax="false">  
+		                    <f:setPropertyActionListener value="casablanca" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Cruze" ajax="false">  
+		                    <f:setPropertyActionListener value="cruze" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Cupertino" ajax="false">  
+		                    <f:setPropertyActionListener value="cupertino" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Dark-Hive" ajax="false">  
+		                    <f:setPropertyActionListener value="dark-hive" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Delta" ajax="false">  
+		                    <f:setPropertyActionListener value="delta" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Dot-Luv" ajax="false">  
+		                    <f:setPropertyActionListener value="dot-luv" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Eggplant" ajax="false">  
+		                    <f:setPropertyActionListener value="eggplant" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Excite-Bike" ajax="false">  
+		                    <f:setPropertyActionListener value="excite-bike" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Flick" ajax="false">  
+		                    <f:setPropertyActionListener value="flick" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Glass-X" ajax="false">  
+		                    <f:setPropertyActionListener value="glass-x" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Home" ajax="false">  
+		                    <f:setPropertyActionListener value="home" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Hot-Sneaks" ajax="false">  
+		                    <f:setPropertyActionListener value="hot-sneaks" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Humanity" ajax="false">  
+		                    <f:setPropertyActionListener value="humanity" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Le-Frog" ajax="false">  
+		                    <f:setPropertyActionListener value="le-frog" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Midnight" ajax="false">  
+		                    <f:setPropertyActionListener value="midnight" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Mint-Choc" ajax="false">  
+		                    <f:setPropertyActionListener value="mint-choc" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Overcast" ajax="false">  
+		                    <f:setPropertyActionListener value="overcast" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Pepper-Grinder" ajax="false">  
+		                    <f:setPropertyActionListener value="pepper-grinder" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Redmond" ajax="false">  
+		                    <f:setPropertyActionListener value="redmond" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Rocket" ajax="false">  
+		                    <f:setPropertyActionListener value="rocket" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Sam" ajax="false">  
+		                    <f:setPropertyActionListener value="sam" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Smoothness" ajax="false">  
+		                    <f:setPropertyActionListener value="smoothness" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="South-Street" ajax="false">  
+		                    <f:setPropertyActionListener value="south-street" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Start" ajax="false">  
+		                    <f:setPropertyActionListener value="start" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Sunny" ajax="false">  
+		                    <f:setPropertyActionListener value="sunny" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Swanky-Purse" ajax="false">  
+		                    <f:setPropertyActionListener value="swanky-purse" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Trontastic" ajax="false">  
+		                    <f:setPropertyActionListener value="trontastic" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="UI-Darkness" ajax="false">  
+		                    <f:setPropertyActionListener value="ui-darkness" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="UI-Lightness" ajax="false">  
+		                    <f:setPropertyActionListener value="ui-lightness" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		                <p:menuitem value="Vader" ajax="false">  
+		                    <f:setPropertyActionListener value="vader" target="#{guestPreferences.theme}" />  
+		                </p:menuitem>  
+		            </p:submenu>  
+					<p:submenu label="Usuário: #{seguranca.nomeUsuario}" icon="usuario-icone">
+						<p:menuitem value="Selecionar setor" oncomplete="PF('selecaoSetorDialog').show();" />
+						<p:separator />
+						<p:menuitem value="Sair" icon="ui-icon-power" onclick="window.location.href = '#{facesContext.externalContext.requestContextPath}/logout';" />
+					</p:submenu>	
+				</p:menubar>
+			</h:form>
+		</div>
+		<div id="temaSeleciodo">
+			<h:form>
+				Tema selecionado:  <p:commandButton id="themeButton" value="#{guestPreferences.theme}" type="button" />   
+			</h:form>
+		</div>
+		<div id="conteudo">
+			<ui:insert name="corpo" />
+		</div>
+		<div id="rodape">
+			Copyright 2015. Todos os Direitos reservados a CTI - CASIS.
+			<h:form>
+				<p:dock position="bottom">
+				    <p:menuitem value="Home" icon="/resources/imagens/home.png" url="/inicio.xhtml"/>
+				    <p:menuitem value="Sair" icon="/resources/imagens/history.png" onclick="window.location.href = '#{facesContext.externalContext.requestContextPath}/logout';" />
+				    
+				    <p:menuitem value="Demosntração 1" icon="/resources/imagens/portfolio.png" url="/inicio.xhtml"/>
+				    <p:menuitem value="Demosntração 2" icon="/resources/imagens/link.png" url="/inicio.xhtml"/>
+				    <p:menuitem value="Demosntração 3" icon="/resources/imagens/music.png" url="/inicio.xhtml"/>
+				</p:dock>	
+			</h:form>
+		</div>
+		<script>
+			function configurarMoeda() {
+				$(".moeda").maskMoney({ decimal: ",", thousands: ".", allowZero: true });
+			}
+			$(document).ready(function() {
+				configurarMoeda();
+			});
+		</script>
+		<p:dialog header="Seleção de setor" widgetVar="selecaoSetorDialog" modal="true" resizable="false">
+			<h:panelGroup id="selecaoSetorPanel">
+				<br/>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Setor" for="nomeSetor" />
+					<p:selectOneMenu id="nomeSetor" value="#{selecionaSetorBean.dsSetor}" style="width:270px">
+			          	<f:selectItem itemLabel="Almoxarifado central" itemValue="Central" />
+			            <f:selectItem itemLabel="Almoxarifado CODONTO" itemValue="CODONTO" />
+			            <f:selectItem itemLabel="CAF MMH" itemValue="CAF MMH" />
+			            <f:selectItem itemLabel="Dispensação MMH" itemValue="Disp. MMH" />    
+			        </p:selectOneMenu>
+				</h:panelGrid>
+				<br/>
+				<p:commandButton icon="ui-icon-disk" value="Selecionar" 
+					action="#{selecionaSetorBean.selecionarSetor}" onsuccess="PF('selecaoSetorDialog').hide();" />
+			   	<p:commandButton value="Sair" title = "Sair sem selecionar um setor" 
+			   		onclick="PF('selecaoSetorDialog').hide();" icon="ui-icon-power"/>
+			</h:panelGroup>
+		</p:dialog>	
+	</h:body>
+</html>

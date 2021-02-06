@@ -1,0 +1,191 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmOme">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+
+			<h2>Cadastro de OME</h2>
+					
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" title="Pesquisar" icon="pesquisar-icone"
+						actionListener="#{omeBean.pesquisaOmes}" update=":frmOme:omeTable"> 
+		   			</p:commandButton>	 
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+					<p:commandButton value="Incluir" title="Novo" icon="novo-icone"
+						oncomplete="PF('edicaoOmeDialog').show(); return false;"
+		  				process="@this" update=":frmOme:inclusaoPanel">
+		  				<f:setPropertyActionListener target="#{omeBean.ome}" value="#{ome}" />
+		   			</p:commandButton>	 
+                    <p:commandButton value="Exportar para XLS" ajax="false" icon="excel-icone"
+                        disabled="#{empty omeBean.omes}">
+                        <p:dataExporter type="xls" target="omeTable"
+                        fileName="Ome" postProcessor="#{formatarExportacaoExcel.posProcessarXls}" />
+                    </p:commandButton>
+                    <p:commandButton value="Exportar para PDF" ajax="false" icon="pdf-icone"
+                        disabled="#{empty omeBean.omes}">
+                        <p:dataExporter type="pdf" target="omeTable" fileName="Ome"/>
+                    </p:commandButton>
+			        <p:commandButton 
+			           value="Sair" ajax="false" title = "Retorna ao menu"
+			           action="/inicio.xhtml" icon="sair-icone"  
+			           onclick="this.form.target='_self'">
+			        </p:commandButton> 		   				 
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+			    	<p:panelGrid columns="2" id="painelPesquisa" style="width: 100%; margin-top: 20px"
+			    			columnClasses="rotulo, campo">
+			    		<p:outputLabel value="Nome da OME" for="descricao"/>
+			    		<p:inputText id="descricao" size="60" value="#{omeBean.omeFiltro.dsOme}"/>
+			    	</p:panelGrid>
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+			
+			<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+		    	<p:dataTable id="omeTable" value="#{omeBean.omes}" var="ome"
+		    		style="margin-top: 20px" emptyMessage="Nenhuma OME encontrada." 
+		    		paginator="true" rows="7" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		            rowsPerPageTemplate="5,7,10,15,20"
+		            currentPageReportTemplate="[ Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros  
+                    - Página: {currentPage}/{totalPages} ]">
+		    		
+		    		<p:column headerText="Código" style="text-align: left; width:45px" sortBy="#{ome.cdOme}">
+		    			<h:outputText value="#{ome.cdOme}" />
+		    		</p:column>
+		    		<p:column headerText="Nome da OME" style="text-align: left; width:150px" sortBy="#{ome.dsOme}">
+		    			<h:outputText value="#{ome.dsOme}" />
+		    		</p:column>
+		    		<p:column headerText="Nome abrev. da OME" style="text-align: left; width:145px" sortBy="#{ome.dsOmeAbrev}">
+		    			<h:outputText value="#{ome.dsOmeAbrev}" />
+		    		</p:column>
+		    		<p:column headerText="Empresa" style="text-align: left; width:65px" sortBy="#{ome.cdEmpresa}">
+		    			<h:outputText value="#{ome.cdEmpresa}" />
+		    		</p:column>
+		    		<p:column headerText="Referência" style="text-align: left; width:65px" sortBy="#{ome.cdReferencia}">
+		    			<h:outputText value="#{ome.cdReferencia}" />
+		    		</p:column>
+		    		<p:column headerText="Rua, Av., Tva." style="text-align: left" sortBy="#{ome.dsLogradouro}">
+		    			<h:outputText value="#{ome.dsLogradouro}" />
+		    		</p:column>
+		    		<p:column headerText="Bairro" style="text-align: left" sortBy="#{ome.dsBairro}">
+		    			<h:outputText value="#{ome.dsBairro}" />
+		    		</p:column>
+		    		<p:column headerText="Cidade" style="text-align: left" sortBy="#{ome.dsCidade}">
+		    			<h:outputText value="#{ome.dsCidade}" />
+		    		</p:column>
+		    		<p:column headerText="UF" style="text-align: left; width:30px" sortBy="#{ome.cdUf}">
+		    			<h:outputText value="#{ome.cdUf}" />
+		    		</p:column>
+		    		<p:column headerText="CEP" style="text-align: left; width:65px" sortBy="#{ome.dsCep}">
+		    			<h:outputText value="#{ome.dsCep}" >
+		    				<f:converter converterId="CEPConverter" />
+		    			</h:outputText>	
+		    		</p:column>
+		    		<p:column style="width: 100px; text-align: center; width:70px" exportable="false">
+						<f:facet name="header">Ações</f:facet>
+						<p:commandButton icon="editar-icone" title="Editar" oncomplete="configurarMoeda(); PF('edicaoOmeDialog').show(); return false;"
+	    					process="omeTable" update=":frmOme:inclusaoPanel">
+	    				    <f:setPropertyActionListener target="#{omeBean.ome}" value="#{ome}" />
+		    			</p:commandButton>	 
+	                    <p:commandButton icon="remover-icone" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmOme:confirmacaoExclusaoDialog">
+	    				    <f:setPropertyActionListener target="#{omeBean.ome}" 
+	    					value="#{ome}" />
+		    			</p:commandButton>	    				
+		    		</p:column>
+		    	</p:dataTable>
+	    	</p:panelGrid>
+
+	    	<p:confirmDialog header="Exclusão de OME" 
+	    		message="Tem certeza que deseja excluir a OME #{omeBean.ome.dsOme}?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" icon="ui-icon-close"/>
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+	    			actionListener="#{omeBean.remover(omeBean.ome)}" process="@this"
+	    			update=":frmOme:omeTable, :frmOme:growl" icon="ui-icon-check"/>
+	    	</p:confirmDialog>    	
+
+			<p:dialog header="Edição de OME" 
+			widgetVar="edicaoOmeDialog" modal="true" resizable="false">
+				<h:panelGroup id="inclusaoPanel">
+					<br/>
+					<table style="width:100%">
+						<tr>
+							<td width="10px">
+								<h:panelGrid columns="1" style="text-align: left">
+									<p:outputLabel value="Código" for="cdOme" />
+									<p:inputText id="cdOme" size="10" maxlength="11" value="#{omeBean.ome.cdOme}"/>
+								</h:panelGrid>
+							</td>
+							<td width="45px">
+								<h:panelGrid columns="1" style="text-align: left">
+									<p:outputLabel value="Nome da OME" for="dsOme" />
+									<p:inputText id="dsOme" size="57" maxlength="300" value="#{omeBean.ome.dsOme}"/>
+								</h:panelGrid>
+							</td>
+							<td>
+								<h:panelGrid columns="1" style="text-align: left">
+									<p:outputLabel value="Descr. Abrev. da OME" for="dsOmeAbrev" />
+									<p:inputText id="dsOmeAbrev" size="46" maxlength="300" value="#{omeBean.ome.dsOmeAbrev}"/>
+								</h:panelGrid>
+							</td>
+						</tr>
+					</table>
+					<table style="width:100%">
+						<tr>
+							<td>
+								<h:panelGrid columns="1" style="text-align: left">
+									<p:outputLabel value="Rua, Av. Tva." for="dsLogradouro" />
+									<p:inputText id="dsLogradouro" size="123" maxlength="300" value="#{omeBean.ome.dsLogradouro}"/>
+								</h:panelGrid>
+							</td>
+						</tr>
+					</table>
+					<table style="width:100%">
+						<tr>
+							<td width="30px">
+								<h:panelGrid columns="1" style="text-align: left">
+										<p:outputLabel value="Bairro" for="dsBairro" />
+										<p:inputText id="dsBairro" size="40" maxlength="300" value="#{omeBean.ome.dsBairro}"/>
+								</h:panelGrid>
+							</td>
+							<td width="30px">
+								<h:panelGrid columns="1" style="text-align: left">
+										<p:outputLabel value="Cidade" for="dsCidade" />
+										<p:inputText id="dsCidade" size="40" maxlength="300" value="#{omeBean.ome.dsCidade}"/>
+								</h:panelGrid>
+							</td>
+							<td width="10px">
+								<h:panelGrid columns="1" style="text-align: left">
+										<p:outputLabel value="UF" for="cdUf" />
+										<p:inputText id="cdUf" size="10" maxlength="2" value="#{omeBean.ome.cdUf}"/>
+								</h:panelGrid>
+							</td>
+							<td width="16px">
+								<h:panelGrid columns="1" style="text-align: left">
+										<p:outputLabel value="CEP" for="dsCep" />
+										<p:inputMask id="dsCep" size="16" maxlength="8" value="#{omeBean.ome.dsCep}" mask="99999-999"/>
+								</h:panelGrid>
+							</td>
+						</tr>
+					</table>
+					<br/>
+					<p:commandButton icon="ui-icon-disk" value="Salvar" 
+						update=":frmOme:omeTable, :frmOme:inclusaoPanel" 
+						actionListener="#{omeBean.salvar}" onclick="dialog.reset();"/>
+				   	<p:commandButton value="Sair" title = "Sair sem gravar" 
+				   		onclick="dialog.reset();" icon="ui-icon-power"/>
+				</h:panelGroup>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

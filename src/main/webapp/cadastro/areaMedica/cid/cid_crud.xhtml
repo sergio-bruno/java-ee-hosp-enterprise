@@ -1,0 +1,107 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmCid">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+
+			<h2>Cadastro de cids</h2>
+					
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" title="Pesquisar" icon="pesquisar-icone"
+						actionListener="#{cidBean.pesquisaCids}" update=":frmCid:cidTable"> 
+		   			</p:commandButton>	 
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+					<p:commandButton value="Incluir" title="Novo" icon="novo-icone"
+						oncomplete="configurarMoeda(); PF('edicaoCidDialog').show(); return false;"
+		  				process="@this" update=":frmCid:inclusaoPanel">
+		  				<f:setPropertyActionListener target="#{cidBean.cid}" value="#{cid}" />
+		   			</p:commandButton>	 
+                    <p:commandButton value="Exportar para XLS" ajax="false" icon="excel-icone"
+                        disabled="#{empty cidBean.cids}">
+                        <p:dataExporter type="xls" target="cidTable"
+                        fileName="Cid" postProcessor="#{formatarExportacaoExcel.posProcessarXls}" />
+                    </p:commandButton>
+                    <p:commandButton value="Exportar para PDF" ajax="false" icon="pdf-icone"
+                        disabled="#{empty cidBean.cids}">
+                        <p:dataExporter type="pdf" target="cidTable" fileName="Cid"/>
+                    </p:commandButton>
+			        <p:commandButton 
+			           value="Sair" ajax="false" title = "Retorna ao menu"
+			           action="/inicio.xhtml" icon="sair-icone"  
+			           onclick="this.form.target='_self'">
+			        </p:commandButton> 		   				 
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+			    	<p:panelGrid columns="2" id="painelPesquisa" style="width: 100%; margin-top: 20px"
+			    			columnClasses="rotulo, campo">
+			    		<p:outputLabel value="Nome do cid" for="descricao"/>
+			    		<p:inputText id="descricao" size="60" value="#{cidBean.cidFiltro.dsCid}"/>
+			    	</p:panelGrid>
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+			
+			<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+		    	<p:dataTable id="cidTable" value="#{cidBean.cids}" var="cid"
+		    		style="margin-top: 20px" emptyMessage="Nenhum cid encontrado." 
+		    		paginator="true" rows="7" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		            rowsPerPageTemplate="5,7,10,15,20"
+		            currentPageReportTemplate="[ Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros  
+                    - Página: {currentPage}/{totalPages} ]">
+		    		
+		    		<p:column headerText="Nome do cid" style="text-align: left" sortBy="#{cid.dsCid}">
+		    			<h:outputText value="#{cid.dsCid}" />
+		    		</p:column>
+		    		<p:column style="width: 100px; text-align: center" exportable="false">
+						<f:facet name="header">Ações</f:facet>
+						<p:commandButton icon="editar-icone" title="Editar" oncomplete="configurarMoeda(); PF('edicaoCidDialog').show(); return false;"
+	    					process="cidTable" update=":frmCid:inclusaoPanel">
+	    				    <f:setPropertyActionListener target="#{cidBean.cid}" value="#{cid}" />
+		    			</p:commandButton>	 
+	                    <p:commandButton icon="remover-icone" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmCid:confirmacaoExclusaoDialog">
+	    				    <f:setPropertyActionListener target="#{cidBean.cid}" 
+	    					value="#{cid}" />
+		    			</p:commandButton>	    				
+		    		</p:column>
+		    	</p:dataTable>
+	    	</p:panelGrid>
+
+	    	<p:confirmDialog header="Exclusão de cid" 
+	    		message="Tem certeza que deseja excluir o cid #{cidBean.cid.dsCid}?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" icon="ui-icon-close"/>
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+	    			actionListener="#{cidBean.remover(cidBean.cid)}" process="@this"
+	    			update=":frmCid:cidTable, :frmCid:growl" icon="ui-icon-check"/>
+	    	</p:confirmDialog>    	
+
+			<p:dialog header="Edição de cid" 
+			widgetVar="edicaoCidDialog" modal="true" resizable="false">
+				<h:panelGroup id="inclusaoPanel">
+					<br/>
+					<h:inputHidden value="#{cidBean.cid.cdCid}" />
+					<h:panelGrid columns="2" style="text-align: left">
+						<p:outputLabel value="Nome do cid:" for="dsCid" />
+						<p:inputText id="dsCid" size="45" maxlength="150" value="#{cidBean.cid.dsCid}"/>
+					</h:panelGrid>
+					<br/>
+					<p:commandButton icon="ui-icon-disk" value="Salvar" 
+						update=":frmCid:cidTable, :frmCid:inclusaoPanel" 
+						actionListener="#{cidBean.salvar}" onclick="dialog.reset();"/>
+				   	<p:commandButton value="Sair" title = "Sair sem gravar" 
+				   		onclick="javascript:void(0);" icon="ui-icon-power"/>
+				</h:panelGroup>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

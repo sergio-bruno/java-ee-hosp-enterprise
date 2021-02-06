@@ -1,0 +1,116 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmTipoConselho">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+
+			<h2>Cadastro de tipo de conselho</h2>
+					
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" title="Pesquisar" icon="pesquisar-icone"
+						actionListener="#{tipoConselhoBean.pesquisaTipoConselhos}" update=":frmTipoConselho:tipoConselhoTable"> 
+		   			</p:commandButton>	 
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+					<p:commandButton value="Incluir" title="Novo" icon="novo-icone"
+						oncomplete="PF('edicaoTipoConselhoDialog').show(); return false;"
+		  				process="@this" update=":frmTipoConselho:inclusaoPanel">
+		  				<f:setPropertyActionListener target="#{tipoConselhoBean.tipoConselho}" value="#{tipoConselho}" />
+		   			</p:commandButton>	 
+                    <p:commandButton value="Exportar para XLS" ajax="false" icon="excel-icone"
+                        disabled="#{empty tipoConselhoBean.tipoConselhos}">
+                        <p:dataExporter type="xls" target="tipoConselhoTable"
+                        fileName="TipoConselho" postProcessor="#{formatarExportacaoExcel.posProcessarXls}" />
+                    </p:commandButton>
+                    <p:commandButton value="Exportar para PDF" ajax="false" icon="pdf-icone"
+                        disabled="#{empty tipoConselhoBean.tipoConselhos}">
+                        <p:dataExporter type="pdf" target="tipoConselhoTable" fileName="TipoConselho"/>
+                    </p:commandButton>
+			        <p:commandButton 
+			           value="Sair" ajax="false" title = "Retorna ao menu"
+			           action="/inicio.xhtml" icon="sair-icone"  
+			           onclick="this.form.target='_self'">
+			        </p:commandButton> 		   				 
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+			    	<p:panelGrid columns="2" id="painelPesquisa" style="width: 100%; margin-top: 20px"
+			    			columnClasses="rotulo, campo">
+			    		<p:outputLabel value="Nome do tipoConselho" for="descricao"/>
+			    		<p:inputText id="descricao" size="60" value="#{tipoConselhoBean.tipoConselhoFiltro.dsTipoConselho}"/>
+			    	</p:panelGrid>
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+			
+			<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+		    	<p:dataTable id="tipoConselhoTable" value="#{tipoConselhoBean.tipoConselhos}" var="tipoConselho"
+		    		style="margin-top: 20px" emptyMessage="Nenhum tipoConselho encontrado." 
+		    		paginator="true" rows="7" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		            rowsPerPageTemplate="5,7,10,15,20"
+		            currentPageReportTemplate="[ Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros  
+                    - Página: {currentPage}/{totalPages} ]">
+		    		
+		    		<p:column headerText="Tipo de conselho" style="text-align: left" sortBy="#{tipoConselho.dsTipoConselho}">
+		    			<h:outputText value="#{tipoConselho.dsTipoConselho}" />
+		    		</p:column>
+		    		<p:column headerText="Ativo" style="width: 100px; text-align: left" sortBy="#{tipoConselho.snAtivo.descricao}">
+		    			<h:outputText value="#{tipoConselho.snAtivo.descricao}" />
+		    		</p:column>
+		    		
+		    		<p:column style="width: 100px; text-align: center" exportable="false">
+						<f:facet name="header">Ações</f:facet>
+						<p:commandButton icon="editar-icone" title="Editar" oncomplete="PF('edicaoTipoConselhoDialog').show(); return false;"
+	    					process="tipoConselhoTable" update=":frmTipoConselho:inclusaoPanel">
+	    				    <f:setPropertyActionListener target="#{tipoConselhoBean.tipoConselho}" value="#{tipoConselho}" />
+		    			</p:commandButton>	 
+	                    <p:commandButton icon="remover-icone" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmTipoConselho:confirmacaoExclusaoDialog">
+	    				    <f:setPropertyActionListener target="#{tipoConselhoBean.tipoConselho}" 
+	    					value="#{tipoConselho}" />
+		    			</p:commandButton>	    				
+		    		</p:column>
+		    	</p:dataTable>
+	    	</p:panelGrid>
+
+	    	<p:confirmDialog header="Exclusão de tipo de conselho" 
+	    		message="Tem certeza que deseja excluir o tipo de conselho #{tipoConselhoBean.tipoConselho.dsTipoConselho}?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" icon="ui-icon-close"/>
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+	    			actionListener="#{tipoConselhoBean.remover(tipoConselhoBean.tipoConselho)}" process="@this"
+	    			update=":frmTipoConselho:tipoConselhoTable, :frmTipoConselho:growl" icon="ui-icon-check"/>
+	    	</p:confirmDialog>    	
+
+			<p:dialog header="Edição de tipoConselho" 
+			widgetVar="edicaoTipoConselhoDialog" modal="true" resizable="false">
+				<h:panelGroup id="inclusaoPanel">
+					<br/>
+					<h:inputHidden value="#{tipoConselhoBean.tipoConselho.cdTipoConselho}" />
+					<h:panelGrid columns="2" style="text-align: left">
+						<p:outputLabel value="Nome do tipo de conselho:" for="dsTipoConselho" />
+						<p:inputText id="dsTipoConselho" size="45" maxlength="150" value="#{tipoConselhoBean.tipoConselho.dsTipoConselho}"/>
+		                <p:outputLabel value="Ativo" for="snAtivo"/>
+				        <p:selectOneMenu id="snAtivo" value="#{tipoConselhoBean.tipoConselho.snAtivo}" style="width:125px">
+				            <f:selectItem itemLabel="Sim" itemValue="S" />
+				            <f:selectItem itemLabel="Não" itemValue="N" />
+				        </p:selectOneMenu>                 
+					</h:panelGrid>
+					<br/>
+					<p:commandButton icon="ui-icon-disk" value="Salvar" 
+						update=":frmTipoConselho:tipoConselhoTable, :frmTipoConselho:inclusaoPanel" 
+						action="#{tipoConselhoBean.salvar}" onclick="dialog.reset();" />
+				   	<p:commandButton value="Sair" title = "Sair sem gravar" 
+				   		onclick="dialog.reset();" icon="ui-icon-power"/>
+				</h:panelGroup>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

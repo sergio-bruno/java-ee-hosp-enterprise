@@ -1,0 +1,226 @@
+/* base */
+* { margin:0px; padding:0px; }
+body{ 
+	font-size:12px; 
+	color:#000; 
+	font-family:helvetica, arial, sans-serif;
+	padding-bottom: 30px;
+	text-align:center;
+}
+
+/** cabecalho **/
+#cabecalho, header{
+	background-color: #191970;
+	color: #fff;
+	height: 35px;
+	position: relative;
+}
+#logoCompany {
+	float:left;
+	top: 4px;
+}
+
+/* Menu sistema inicio */
+#menuSistema {
+	float:left;
+	top: 2px;
+    border: 0px !important;
+    padding: 0px !important;
+    background: none !important;
+	position: absolute;
+	margin-left: 165px;
+}
+.menu-sistema {
+    border: 0px !important;
+    padding: 0px !important;
+    background: none !important;
+}
+.menu-sistema .ui-menu-parent > a .ui-menuitem-text, .menu-sistema > .ui-menu-list > .ui-menuitem > a > .ui-menuitem-text {
+    color: #ffffff !important;
+}
+.menu-sistema .ui-menuitem-text {
+	text-align:left !important;	
+}
+.menu-sistema .ui-icon-triangle-1-s {
+    background: url(#{resource['imagens:seta-para-baixo.png']}) no-repeat;
+}
+/* Menu sistema fim */
+
+#temaSeleciodo  {
+	color: white;
+	display: block;
+	float: right;
+	right: 20%;
+	margin-right: -250px;
+	position: absolute;
+	top: 3px;
+}
+
+/* Usuário logado */
+#usuarioLogado  {
+	color: white;
+	display: block;
+	float: right;
+	right: 20%;
+	margin-right: -250px;
+	position: absolute;
+	top: 3px;
+}
+#usuarioLogado a {
+	color: #ffff60;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+#usuarioLogado a:hover {
+	text-decoration: none;
+}
+#usuarioLogout  {
+	color: white;
+	display: block;
+	float: right;
+	right: 20%;
+	margin-right: -50px;
+	position: absolute;
+	top: 10px;
+}
+#usuarioLogout a {
+	color: #ffff60;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+#usuarioLogout a:hover {
+	text-decoration: none;
+}
+/* Usuário logado */
+
+/* Centralizar os botões da caixa de dialogo de confirmação */
+.ui-dialog .ui-dialog-buttonpane{
+	text-align: center !important;
+} 
+
+/* miolo */
+#conteudo, section {
+	padding: 0px 8px
+}
+
+/** rodape **/
+#rodape, footer { 
+	background-color: #191970;
+	width:100%;
+	position:fixed;
+	bottom: 0;
+	padding:8px 0px;
+	text-align: left;
+	font-size:10px; 
+	color: #FFF;
+	display: block;
+}
+
+/* TITULO */
+h2{
+	display:block;
+	position:relative;
+	overflow:hidden;
+	color:#2B2926;
+	text-align:left;
+	height:auto;
+	/*margin-bottom:10px;
+	border-bottom: 1px solid;*/
+	clear: both;
+	font-size: 22px;
+	width: 100%;
+}
+
+/* validacao */
+.erros {
+	margin: 0 0 10px 0;
+	padding: 0 8px;
+	clear: both;
+}
+.erros li {
+	display: inline;
+	list-style-position: inside;
+	list-style-type: none;
+	color: #C22;
+	background: #FFDFDF;
+	border: 2px solid #DF7D7D;
+	float: left;
+	padding: 6px;
+	margin: 3px;
+}
+.ajax-status {
+	position: fixed;
+	top: 40px;
+	right: 10px;
+	width: 35px;
+	height: 35px
+}
+
+/*Galeria de imagens */
+.ui-icon.excel-icone {
+  background: url(#{resource['imagens:excel.png']}) no-repeat;
+  height: 16px;
+  width: 16px;
+}
+.ui-icon.pdf-icone {
+  background: url(#{resource['imagens:pdf.png']}) no-repeat;
+  height: 16px;
+  width: 16px;
+}
+.ui-icon.editar-icone {
+  background: url(#{resource['imagens:editar.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.novo-icone {
+  background: url(#{resource['imagens:novo.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.pesquisar-icone {
+  background: url(#{resource['imagens:pesquisar.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.remover-icone {
+  background: url(#{resource['imagens:remover.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.sair-icone {
+  background: url(#{resource['imagens:sair.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.usuario-icone {
+  background: url(#{resource['imagens:usuario.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.impressora-icone {
+  background: url(#{resource['imagens:impressora.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.gerenciar-icone {
+  background: url(#{resource['imagens:gerenciar.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.pasta-icone {
+  background: url(#{resource['imagens:pasta.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.tema-icone {
+  background: url(#{resource['imagens:tema.png']}) no-repeat;
+  height: 20px;
+  width: 20px;
+}
+.ui-icon.lupaPesquisar-icone {
+  background: url(#{resource['imagens:lupaPesquisar.png']}) no-repeat;
+  max-width:20px;
+  max-height:20px;
+}
+/*Galeria de imagens fim*/
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings
+xmlns="http://java.sun.com/xml/ns/persistence/orm"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+version="2.0">
+	<entity class="br.gov.pe.sismepe.ehospenterprise.domain.Usuario"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.domain.Papel"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Cargo"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.TipoConselho"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Conselho"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Uf"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Cidade"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.TipoLogradouro"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Endereco"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.UnidadeAtendimento"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.UnidadeMedida"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.GrupoProduto"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.SubGrupoProduto"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Substancia"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Ome"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.ClasseMedicamento"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Empresa"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Cid"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Pessoa"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.PessoaDependente"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.PessoaTitular"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Paciente"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.CategoriaCid"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.OrigemAtend"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Atendimento"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.AtendimentoIntCred"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.AtendimentoCid"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.AtendimentoIntCredMtv"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Prestador"/>
+	<entity class="br.gov.pe.sismepe.ehospenterprise.entidades.Especialidade"/>
+</entity-mappings>

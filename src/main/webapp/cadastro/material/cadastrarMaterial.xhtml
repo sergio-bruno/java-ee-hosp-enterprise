@@ -1,0 +1,172 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmClasseMedicamento">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+
+			<h2>Cadastrar Material</h2><br /><br />
+					
+	    	<p:fieldset legend="Dados do Material" style="margin-bottom:20px; width: 80%; margin: 0px auto;">
+					<table style="width:100%;">
+						<tr>
+							<td>
+								<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+									<h:outputText value="Código" id="labelDescricao1111" />
+									<p:inputText id="descricao11111" style="width: 310px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" />
+								</h:panelGrid>
+							</td>
+							<td>
+								<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+									<h:outputText value="Código E-Fisco" id="labelDescricao11" />
+									<p:inputText id="descricaoaa" style="width: 310px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" />
+								</h:panelGrid>
+							</td>
+							<td>
+								<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+									<h:outputText value="Código Barras" id="labelDescricao33" />
+									<p:inputText id="descricao2" maxlength="" style="width: 310px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" />
+								</h:panelGrid>
+							</td>
+						</tr>
+	    			</table>
+	    			<table style="width:100%">
+	    				<tr>
+							<td width="100%">
+			    				<h:panelGrid columns="1" cellpadding="0" style="text-align:left;" >
+						            <h:outputText value="Descrição" id="labelDescricao" />
+						            <p:inputText id="descricao" maxlength="190" style="width: 610%;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" /> 
+						        </h:panelGrid>
+						    </td>
+						</tr>
+					</table>
+	    			<table style="width:100%">
+	    				<tr>
+							<td>
+								<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+									<h:outputText value="Código Fabricante" id="labelDescricao11dww11111" />
+									<p:inputText id="descricao1111w1111" style="width: 480px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" />
+								</h:panelGrid>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+												<h:outputText value="Nomes Fabricante" id="labelDescricao111111aa1" />
+												<p:inputText id="descricaoaa11aaa" style="width: 440px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" />
+											</h:panelGrid>
+										</td>
+										<td valign="bottom">
+											<p:commandButton title="Pesquisar" icon="lupaPesquisar-icone"
+												actionListener="#{empresaBean.pesquisaEmpresas}" update=":frmClasseMedicamento" > 
+								   			</p:commandButton>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<table style="width:100%">
+	    				<tr>
+							<td>
+								<p:fieldset legend="Tipo*" style="margin-bottom:20px; height: 137px;">
+									<h:panelGrid columns="1" cellpadding="0" style="width: 150px; text-align:left;">
+										 <p:selectOneRadio id="customRadio" layout="custom" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" >
+								            <f:selectItem itemLabel="Consumo" itemValue="Consumo" /><br />
+								            <f:selectItem itemLabel="Permanente" itemValue="Permanente" /><br />
+								            <f:selectItem itemLabel="Relacionado" itemValue="Relacionado" />
+								        </p:selectOneRadio>
+								        <h:panelGrid columns="2" cellpadding="5">
+								            <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+								            <h:outputLabel for="opt1" value="&#160;Consumo" />
+								 
+								            <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+								            <h:outputLabel for="opt2" value="&#160;Permanente" />
+								 
+								            <p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+								            <h:outputLabel for="opt3" value="&#160;Relacionado" />
+								        </h:panelGrid>
+								    </h:panelGrid>
+								</p:fieldset>
+							</td>
+							<td>
+								<p:fieldset legend="?????" style="margin-bottom:20px; text-align:left;">
+									<h:panelGrid columns="2" style="margin-bottom:10px; width: 150px;" cellpadding="5">
+								        <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+								        <h:outputText value="&#160;Medicamento" />
+								        
+								        <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+								        <h:outputText value="&#160;Consignado" />
+								        
+								        <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+								        <h:outputText value="&#160;Padronizado" />
+								        
+								        <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+								        <h:outputText value="&#160;Kit" />
+								    </h:panelGrid>
+								</p:fieldset>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											<p:fieldset legend="Fraciona Medicamento" style="margin-bottom:20px; width: 150px; text-align:left;">
+												<p:selectOneRadio id="console" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}">
+										            <f:selectItem itemLabel="Sim" itemValue="S" />
+										            <f:selectItem itemLabel="Não" itemValue="N" />
+										        </p:selectOneRadio>
+											</p:fieldset>
+										</td>
+										<td>
+											<p:fieldset legend="Situação" style="margin-bottom:20px; width: 150px; height: 70px; text-align:left;">
+												<p:selectOneRadio id="situacaooo" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}">
+										            <f:selectItem itemLabel="Ativo" itemValue="S" />
+										            <f:selectItem itemLabel="Bloqueado" itemValue="N" />
+										        </p:selectOneRadio>
+											</p:fieldset>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<p:fieldset legend="Potencialmente Perigoso" style="margin-bottom:20px; width: 150px; text-align:left;">
+												<p:selectOneRadio id="pPerigoso" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}">
+										            <f:selectItem itemLabel="Sim" itemValue="S" />
+										            <f:selectItem itemLabel="Não" itemValue="N" />
+										        </p:selectOneRadio>
+											</p:fieldset>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+		    </p:fieldset>
+		    <br />
+		    <table style="width: 83%; margin: 0px auto;">
+			    <tr>
+					<td>
+						<h:panelGrid columns="1" cellpadding="5" style="text-align:left;">
+							<h:outputText value="Observação" />
+							<p:inputTextarea rows="6" cols="33" style="width: 426%;" />
+						</h:panelGrid>
+			    	</td>
+				</tr>
+		    </table>
+		    <br />
+		    <table style="width:80%; margin: 0px auto;" >
+		    	<tr>
+		    		<td align="right">
+			    		<p:button value="Salvar" title = "Salvar" onclick="javascript:void(0);" icon="ui-icon-power"/>
+					    <p:button value="Limpar" style="margin: 2px;" title = "Limpar filtros" onclick="javascript:void(0);" icon="ui-icon-power"/>
+		    		</td>
+		    	</tr>
+		    </table>
+		    <br />
+		    <br />
+		</h:form>
+	</ui:define>
+</ui:composition>

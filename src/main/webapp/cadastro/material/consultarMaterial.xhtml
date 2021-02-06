@@ -1,0 +1,142 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmClasseMedicamento">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+
+			<h2>Consultar Material</h2><br /><br />
+					
+	    	<p:fieldset legend="Dados do Material" style="margin-bottom:20px; width: 80%; margin: 0px auto;">
+	    			<table style="width:100%">
+	    				<tr>
+							<td width="100%">
+			    				<h:panelGrid columns="1" cellpadding="0" style="text-align:left;" >
+						            <h:outputText value="Descrição" id="labelDescricao" />
+						            <p:inputText id="descricao" maxlength="190" style="width: 604%;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" /> 
+						        </h:panelGrid>
+						    </td>
+						</tr>
+					</table>
+					<table style="width:100%;">
+						<tr>
+							<td>
+								<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+									<h:outputText value="Código E-Fisco" id="labelDescricao1" />
+									<p:inputText id="descricao1" style="width: 220px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" />
+								</h:panelGrid>
+							</td>
+							<td>
+								<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+									<h:outputText value="Situação" id="labelDescricao2" />
+									<p:selectOneMenu id="console" style="width: 220px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}">
+							            <f:selectItem itemLabel="Select One" itemValue="" />
+							            <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+							            <f:selectItem itemLabel="PS4" itemValue="PS4" />
+							            <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+							        </p:selectOneMenu>
+								</h:panelGrid>
+							</td>
+							<td>
+								<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+									<h:outputText value="Código Inicial" id="labelDescricao3" />
+									<p:inputText id="descricao2" maxlength="" style="width: 220px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" />
+								</h:panelGrid>
+							</td>
+							<td>
+								<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+									<h:outputText value="Código Final" id="labelDescricao4" />
+									<p:inputText id="descricao3" maxlength="" style=" width: 220px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}" />
+								</h:panelGrid>
+							</td>
+						</tr>
+	    			</table>
+	    			<table style="width:100%">
+	    				<tr>
+							<td>
+			    				<h:panelGrid columns="1" cellpadding="0" style="text-align:left;" >
+						            <h:outputText value="Subgrupo" id="subGrupo" />
+						            <p:selectOneMenu id="inputSubGrupo" style="width: 478px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}">
+							            <f:selectItem itemLabel="Select One" itemValue="" />
+							            <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+							            <f:selectItem itemLabel="PS4" itemValue="PS4" />
+							            <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+							        </p:selectOneMenu> 
+						        </h:panelGrid>
+						    </td>
+						    <td>
+			    				<h:panelGrid columns="1" cellpadding="0" style="text-align:left;">
+						            <h:outputText value="Grupo" id="labelGrupo" />
+						            <p:selectOneMenu id="inputGrupo" style="width: 478px;" value="#{classeMedicamentoBean.classeMedicamentoFiltro.dsClasseMedicamento}">
+							            <f:selectItem itemLabel="Select One" itemValue="" />
+							            <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+							            <f:selectItem itemLabel="PS4" itemValue="PS4" />
+							            <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+							        </p:selectOneMenu> 
+						        </h:panelGrid>
+						    </td>
+						</tr>
+					</table>
+		    </p:fieldset>
+		    <br />
+		    <table style="width:80%; margin: 0px auto;" >
+		    	<tr>
+		    		<td align="right">
+			    		<p:button value="Consultar" title = "Realizar pesquisa" onclick="javascript:void(0);" icon="ui-icon-search"/>
+					    <p:button value="Novo" style="margin: 5px;" title = "Incluir um novo material" onclick="javascript:void(0);" icon="ui-icon-file"/>
+					    <p:button value="Limpar" style="margin: 2px;" title = "Limpar filtros" onclick="javascript:void(0);" icon="ui-icon-eraser"/>
+		    		</td>
+		    	</tr>
+		    </table>
+		    <br />
+		    <p:fieldset legend="Lista de Materiais" style="margin-bottom:20px; width: 80%; margin: 0px auto;">
+	    			<table style="width:100%">
+	    				<tr>
+							<td width="100%">
+			    				<h:panelGrid columns="1" cellpadding="0" style="text-align:left;" >
+						            <p:dataTable id="empresaTable" value="" var="material"
+							    		style="margin-top: 20px" emptyMessage="Nenhuma empresa encontrada." 
+							    		paginator="true" rows="7" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+							            rowsPerPageTemplate="5,7,10,15,20"
+							            currentPageReportTemplate="[ Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros  
+					                    - Página: {currentPage}/{totalPages} ]">
+							    		
+							    		<p:column headerText="Código" style="text-align: left" sortBy="">
+							    			<h:outputText value="" />
+							    		</p:column>
+					
+							    		<p:column headerText="Código E-Fisco" style="text-align: left" sortBy="">
+							    			<h:outputText value="" />
+							    		</p:column>
+					
+							    		<p:column headerText="Nome Material" style="width: 130px; text-align: left" sortBy="">
+							    			<h:outputText value="" ></h:outputText>	
+							    		</p:column>
+					
+							    		<p:column headerText="Tipo" style="width: 130px; text-align: left" sortBy="">
+							    			<h:outputText value="" />
+							    		</p:column>
+					
+							    		<p:column headerText="Potencialmente Perigoso" style="width: 130px; text-align: left" sortBy="">
+							    			<h:outputText value="" />
+							    		</p:column>
+					
+							    		<p:column style="width: 20px; text-align: center" exportable="false">
+							    		</p:column>
+							    		<p:column style="width: 20px; text-align: center" exportable="false">
+							    		</p:column>
+							    		<p:column style="width: 20px; text-align: center" exportable="false">
+							    		</p:column>
+							    	</p:dataTable> 
+						        </h:panelGrid>
+						    </td>
+						</tr>
+					</table>
+		    </p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>

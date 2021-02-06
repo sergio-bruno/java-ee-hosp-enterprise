@@ -1,0 +1,121 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	<ui:define name="corpo">
+		<h:form id="frmUnidadeMedida">
+			<p:growl id="growl" showDetail="true" sticky="false" autpUpdate="true"/>
+			
+			<h2>Cadastro de unidades de medida</h2>
+					
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" title="Pesquisar" icon="pesquisar-icone"
+						actionListener="#{unidadeMedidaBean.pesquisaUnidadeMedidas}" update=":frmUnidadeMedida:unidadeMedidaTable"> 
+		   			</p:commandButton>	 
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+					<p:commandButton value="Incluir" title="Novo" icon="novo-icone"
+						oncomplete="configurarMoeda(); PF('edicaoUnidadeMedidaDialog').show(); return false;"
+		  				process="@this" update=":frmUnidadeMedida:inclusaoPanel">
+		  				<f:setPropertyActionListener target="#{unidadeMedidaBean.unidadeMedida}" value="#{unidadeMedida}" />
+		   			</p:commandButton>	 
+                    <p:commandButton value="Exportar para XLS" ajax="false" icon="excel-icone"
+                        disabled="#{empty unidadeMedidaBean.unidadeMedidas}">
+                        <p:dataExporter type="xls" target="unidadeMedidaTable"
+                        fileName="UnidadeMedida" postProcessor="#{formatarExportacaoExcel.posProcessarXls}" />
+                    </p:commandButton>
+                    <p:commandButton value="Exportar para PDF" ajax="false" icon="pdf-icone"
+                        disabled="#{empty unidadeMedidaBean.unidadeMedidas}">
+                        <p:dataExporter type="pdf" target="unidadeMedidaTable" fileName="UnidadeMedida"/>
+                    </p:commandButton>
+			        <p:commandButton 
+			           value="Sair" ajax="false" title = "Retorna ao menu"
+			           action="/inicio.xhtml" icon="sair-icone"  
+			           onclick="this.form.target='_self'">
+			        </p:commandButton> 		   				 
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup>
+			    	<p:panelGrid columns="2" id="painelPesquisa" style="width: 100%; margin-top: 20px"
+			    			columnClasses="rotulo, campo">
+			    		<p:outputLabel value="Nome da unidade de medida" for="descricao"/>
+			    		<p:inputText id="descricao" size="60" value="#{unidadeMedidaBean.unidadeMedidaFiltro.dsUnidadeMedida}"/>
+			    	</p:panelGrid>
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+			
+			<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+		    	<p:dataTable id="unidadeMedidaTable" value="#{unidadeMedidaBean.unidadeMedidas}" var="unidadeMedida"
+		    		style="margin-top: 20px" emptyMessage="Nenhum unidade de medida encontrada." 
+		    		paginator="true" rows="7" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+		            rowsPerPageTemplate="5,7,10,15,20"
+		            currentPageReportTemplate="[ Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros  
+                    - Página: {currentPage}/{totalPages} ]">
+		    		
+		    		<p:column headerText="Nome da unidade de medida" style="text-align: left" sortBy="#{unidadeMedida.dsUnidadeMedida}">
+		    			<h:outputText value="#{unidadeMedida.dsUnidadeMedida}" />
+		    		</p:column>
+	                <p:column headerText="Unid. abreviada" style="width: 155px; text-align: left" sortBy="#{unidadeMedida.dsUnidadeMedidaAbrev}">
+	                    <h:outputText value="#{unidadeMedida.dsUnidadeMedidaAbrev}" />
+	                </p:column>
+	                <p:column headerText="Ativo" style="width: 55px; text-align: left" sortBy="#{unidadeMedida.snAtivo.descricao}">
+	                    <h:outputText value="#{unidadeMedida.snAtivo.descricao}" />
+	                </p:column>
+		    		<p:column style="width: 100px; text-align: center" exportable="false">
+						<f:facet name="header">Ações</f:facet>
+						<p:commandButton icon="editar-icone" title="Editar" oncomplete="configurarMoeda(); PF('edicaoUnidadeMedidaDialog').show(); return false;"
+	    					process="unidadeMedidaTable" update=":frmUnidadeMedida:inclusaoPanel">
+	    				    <f:setPropertyActionListener target="#{unidadeMedidaBean.unidadeMedida}" value="#{unidadeMedida}" />
+		    			</p:commandButton>	 
+	                    <p:commandButton icon="remover-icone" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+	    					process="@this" update=":frmUnidadeMedida:confirmacaoExclusaoDialog">
+	    				    <f:setPropertyActionListener target="#{unidadeMedidaBean.unidadeMedida}" 
+	    					value="#{unidadeMedida}" />
+		    			</p:commandButton>	    				
+		    		</p:column>
+		    	</p:dataTable>
+	    	</p:panelGrid>
+
+	    	<p:confirmDialog header="Exclusão de unidade de medida" 
+	    		message="Tem certeza que deseja excluir a unidade de medida #{unidadeMedidaBean.unidadeMedida.dsUnidadeMedida}?"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" icon="ui-icon-close"/>
+	    		<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+	    			actionListener="#{unidadeMedidaBean.remover(unidadeMedidaBean.unidadeMedida)}" process="@this"
+	    			update=":frmUnidadeMedida:unidadeMedidaTable, :frmUnidadeMedida:growl" icon="ui-icon-check" 
+	    			/>
+	    	</p:confirmDialog>    	
+
+			<p:dialog header="Edição de unidade de medida" 
+			widgetVar="edicaoUnidadeMedidaDialog" modal="true" resizable="false">
+				<h:panelGroup id="inclusaoPanel">
+					<br/>
+					<h:inputHidden value="#{unidadeMedidaBean.unidadeMedida.cdUnidadeMedida}" />
+					<h:panelGrid columns="2" style="text-align: left">
+						<p:outputLabel value="Nome da unidade de medida" for="dsUnidadeMedida" />
+						<p:inputText id="dsUnidadeMedida" size="45" maxlength="150" value="#{unidadeMedidaBean.unidadeMedida.dsUnidadeMedida}"/>
+		                <p:outputLabel value="Unid. abreviada" for="dsUnidadeMedidaAbrev"/>
+		                <p:inputText id="dsUnidadeMedidaAbrev" size="10" maxlength="10" value="#{unidadeMedidaBean.unidadeMedida.dsUnidadeMedidaAbrev}"/>
+		                <p:outputLabel value="Ativo" for="snAtivo"/>
+				        <p:selectOneMenu id="snAtivo" value="#{unidadeMedidaBean.unidadeMedida.snAtivo}" style="width:125px">
+				            <f:selectItem itemLabel="Sim" itemValue="S" />
+				            <f:selectItem itemLabel="Não" itemValue="N" />
+				        </p:selectOneMenu>                 
+					</h:panelGrid>
+					<br/>
+					<p:commandButton icon="ui-icon-disk" value="Salvar" 
+						update=":frmUnidadeMedida:unidadeMedidaTable, :frmUnidadeMedida:inclusaoPanel" 
+						actionListener="#{unidadeMedidaBean.salvar}" onclick="dialog.reset();"/>
+				   	<p:commandButton value="Sair" title = "Sair sem gravar" 
+				   		onclick="dialog.reset();" icon="ui-icon-power"/>
+				</h:panelGroup>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
